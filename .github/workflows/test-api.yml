@@ -1,0 +1,13 @@
+name: Test API from US
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test API
+        run: |
+          time curl -s https://api.riseapi.cc/v1/chat/completions \
+            -H "Authorization: Bearer sk-spenlgyrunofgedvihpsigqtrsfevypahelbxsxnglxyrojn" \
+            -H "Content-Type: application/json" \
+            -d '{"model":"llama-3-8b-instruct","messages":[{"role":"user","content":"hello"}],"stream":true,"max_tokens":10}' | head -20
