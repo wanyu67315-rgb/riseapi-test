@@ -8,14 +8,14 @@ jobs:
       - name: Test Multiple Models
         run: |
           BASE_URL="https://api.riseapi.cc/v1"
-          KEY="sk-pgqijbiyebwnshqjllagrewnnnoqslmxmtojtutwreaphalk"
+          KEY="sk-ag-b871449955e59be4086fcdbec72d6ea0"
           
           MODELS=(
-            "moonshotai/Kimi-K2.5"
-            "deepseek-ai/DeepSeek-V3.2"
-            "Qwen/Qwen3-32B"
-            "Qwen/QwQ-32B"
-            "deepseek-ai/DeepSeek-R1"
+            "kimi-k2.5"
+            "deepseek-v3.2"
+            "glm-5"
+            "minimax-m2.5"
+            "qwen3.5-plus"
           )
           
           for MODEL in "${MODELS[@]}"; do
