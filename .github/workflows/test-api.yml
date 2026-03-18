@@ -5,9 +5,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Test API
+      - name: Test Single Request
         run: |
+          echo "=== 单次请求测速 ==="
           time curl -s https://api.riseapi.cc/v1/chat/completions \
             -H "Authorization: Bearer sk-spenlgyrunofgedvihpsigqtrsfevypahelbxsxnglxyrojn" \
             -H "Content-Type: application/json" \
-            -d '{"model":"llama-3-8b-instruct","messages":[{"role":"user","content":"hello"}],"stream":true,"max_tokens":10}' | head -20
+            -d '{"model":"Pro/moonshotai/Kimi-K2.5","messages":[{"role":"user","content":"hello"}],"max_tokens":20}' \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print('回复:', d['choices'][0]['message']['content'])"
+
+      - name: Test Stream TTFT
+        run: |
+          echo "=== 流式首token延迟 ==="
+          START=$(date +%s%3N)
+          curl -s https://api.riseapi.cc/v1/chat/completions \
+            -H "Authorization: Bearer sk-spenlgyrunofgedvihpsigqtrsfevypahelbxsxnglxyrojn" \
+            -H "Content-Type: application/json" \
+            -d '{"model":"Pro/moonshotai/Kimi-K2.5","messages":[{"role":"user","content":"hello"}],"stream":true,"max_tokens":5}' \
+            --no-buffer | head -3
+          END=$(date +%s%3N)
+          echo "流式首批数据耗时: $((END-START))ms"
+
+      - name: Test 5 Concurrent
+        run: |
+          echo "=== 5并发测试 ==="
+          START=$(date +%s%3N)
+          for i in 1 2 3 4 5; do
+            (
+              T1=$(date +%s%3N)
+              curl -s https://api.riseapi.cc/v1/chat/completions \
+                -H "Authorization: Bearer sk-spenlgyrunofgedvihpsigqtrsfevypahelbxsxnglxyrojn" \
+                -H "Content-Type: application/json" \
+                -d "{\"model\":\"Pro/moonshotai/Kimi-K2.5\",\"messages\":[{\"role\":\"user\",\"content\":\"$i+$i=?\"}],\"max_tokens\":5}" > /dev/null
+              T2=$(date +%s%3N)
+              echo "请求$i: $((T2-T1))ms"
+            ) &
+          done
+          wait
+          END=$(date +%s%3N)
+          echo "5并发总耗时: $((END-START))ms"
