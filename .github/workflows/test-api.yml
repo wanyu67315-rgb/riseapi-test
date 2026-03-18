@@ -8,7 +8,7 @@ jobs:
       - name: Test Multiple Models
         run: |
           BASE_URL="https://api.riseapi.cc/v1"
-          KEY="sk-spenlgyrunofgedvihpsigqtrsfevypahelbxsxnglxyrojn"
+          KEY="sk-pgqijbiyebwnshqjllagrewnnnoqslmxmtojtutwreaphalk"
           
           MODELS=(
             "Pro/moonshotai/Kimi-K2.5"
