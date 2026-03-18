@@ -11,11 +11,11 @@ jobs:
           KEY="sk-pgqijbiyebwnshqjllagrewnnnoqslmxmtojtutwreaphalk"
           
           MODELS=(
-            "Pro/moonshotai/Kimi-K2.5"
+            "moonshotai/Kimi-K2.5"
             "deepseek-ai/DeepSeek-V3.2"
-            "Qwen/Qwen3.5-122B-A10B"
-            "Pro/zai-org/GLM-5"
-            "Pro/MiniMaxAI/MiniMax-M2.5"
+            "Qwen/Qwen3-32B"
+            "Qwen/QwQ-32B"
+            "deepseek-ai/DeepSeek-R1"
           )
           
           for MODEL in "${MODELS[@]}"; do
